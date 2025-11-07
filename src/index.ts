@@ -53,7 +53,10 @@ server.tool(
             return CreateError(`Path ${absolute_path} is not absolute.`);
         }
         try {
-            await fs.access(absolute_path);
+            const stats = await fs.stat(absolute_path);
+            if (!stats.isFile()) {
+                return CreateError(`Path ${absolute_path} is not a file.`);
+            }
         } catch (error) {
             return CreateError(`File ${absolute_path} does not exist.`);
         }
